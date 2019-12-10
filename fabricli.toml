@@ -1,0 +1,14 @@
+Name = "Fabricli"
+Github = "https://github.com/zhcppy/fabricli"
+ProjectHome = "github.com/zhcppy/fabricli"
+LogLevel = -1
+SelectionProvider = "auto"
+Username = "Admin"
+ChannelId = "mychannel"
+OrgId = "Org1"
+PeerUrl = ""
+OrdererUrl = ""
+ConfigFile = "./scripts/basic-network/connection.yaml"
+
+[CCodeInfo]
+    GoPath = ""
