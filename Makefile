@@ -1,19 +1,25 @@
 #!/usr/bin/make -f
 
-export GO111MODULE = on
-export GOPROXY = https://goproxy.io
-
 TIME_NOW=$$(date +"%Y-%m-%d %H:%M.%S")
+PROXY=GOPROXY=https://goproxy.io
+
+.PHONY: build
+build:
+	go build -mod=readonly -o build/fabriclid ./cmd/fabriclid
+
+.PHONY: build-linux
+build-linux:
+	GOOS=linux GOARCH=amd64 $(MAKE) build
 
 .PHONY: go.sum
 go.sum: go.mod
-	@go mod tidy
-	@go mod verify
-	@go mod download
+	@$(PROXY) go mod tidy
+	@$(PROXY) go mod download
+	@$(PROXY) go mod verify
 
-.PHONY: push
-push: go.sum
-	@git commit -am "UPDATE $(TIME_NOW)" && git push
+.PHONY: install
+install:
+	@go install -v ./cmd/fabriclid
 
 .PHONY: fabric-network
 fabric-network:
@@ -23,3 +29,7 @@ fabric-network:
 fabric-gen:
 	@cd $HOME/go/src/github.com/hyperledger/fabric && \
 	make cryptogen && make configtxgen
+
+.PHONY: push
+push: go.sum
+	@git commit -am "UPDATE $(TIME_NOW)" && git push
